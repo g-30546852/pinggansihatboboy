@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinggan Sihat Digital | Misi Sihat Boboy</title>
+<style>
+:root {
+  --navy:#142b4a;
+  --blue:#2878d4;
+  --green:#22a66b;
+  --orange:#f59e0b;
+  --red:#ef5b68;
+  --bg:#f3f6fb;
+  --white:#fff;
+  --muted:#718096;
+  --border:#e4eaf2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:#23334b;
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;background:var(--navy);color:white;
+  padding:25px 17px;flex-shrink:0;
+}
+.brand{font-size:20px;font-weight:900;line-height:1.4}
+.brand span{color:#9ce6b5}
+.brand small{display:block;font-size:11px;color:#bdcce0;
+  font-weight:400;margin-top:5px}
+.nav{margin-top:35px;display:grid;gap:9px}
+.nav button{
+  border:0;border-radius:10px;background:transparent;
+  color:#d7e3f4;text-align:left;padding:13px;
+}
+.nav button.active,.nav button:hover{
+  background:#29476a;color:white
+}
+.sidebar-note{
+  margin-top:35px;padding:13px;background:#203d5e;
+  border-radius:12px;font-size:12px;line-height:1.7;
+  color:#d7e3f4
+}
+main{flex:1;min-width:0;padding:27px}
+.topbar{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:24px
+}
+h1{font-size:26px;margin:0 0 7px;color:var(--navy)}
+h2{font-size:18px;margin:0 0 17px}
+h3{font-size:15px;margin:0 0 12px}
+.muted{color:var(--muted);font-size:13px}
+.pill{
+  background:#e1f7e9;color:#147744;border-radius:30px;
+  padding:8px 13px;font-size:12px;font-weight:bold
+}
+.panel{
+  background:white;border:1px solid var(--border);
+  border-radius:16px;padding:20px;margin-bottom:20px;
+  box-shadow:0 4px 16px #1a365008
+}
+.hero{
+  background:linear-gradient(120deg,#142b4a,#205b83);
+  border-radius:18px;color:white;padding:24px;margin-bottom:20px
+}
+.hero h2{font-size:21px;margin-bottom:8px}
+.hero p{font-size:13px;color:#d2e6f7;line-height:1.6}
+.grid{display:grid;gap:15px}
+.cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.stat{
+  background:white;border:1px solid var(--border);
+  padding:18px;border-radius:15px;min-width:0
+}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-size:25px;font-weight:800;margin:12px 0 7px;
+  color:var(--navy);overflow-wrap:anywhere}
+.stat-foot{font-size:11px;color:var(--muted)}
+.progress{
+  height:8px;background:#e9eef5;border-radius:20px;
+  overflow:hidden;margin-top:13px
+}
+.progress div{height:100%;background:var(--green);width:0;
+  transition:width .3s}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:12px;font-weight:bold;color:#43536b}
+.field input,.field select{
+  border:1px solid #d8e0eb;border-radius:9px;padding:11px;
+  background:white;color:#23334b;width:100%;min-width:0
+}
+.field input:focus,.field select:focus{
+  outline:2px solid #a8cff8;border-color:var(--blue)
+}
+.full{grid-column:1/-1}
+.btn{
+  border:0;border-radius:9px;padding:12px 15px;
+  background:var(--blue);color:white;font-weight:bold
+}
+.btn:hover{filter:brightness(.95)}
+.btn.green{background:var(--green)}
+.btn.gray{background:#e9eef5;color:#31435d}
+.btn.red{background:#fff0f0;color:#c52e3b}
+.btn.small{padding:7px 10px;font-size:12px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);background:#f8fafd}
+td strong{color:var(--navy)}
+.chart-row{display:grid;grid-template-columns:100px 1fr 48px;
+  gap:10px;align-items:center;margin:16px 0;font-size:12px}
+.bar{height:12px;border-radius:10px;background:#edf1f7;overflow:hidden}
+.bar div{height:100%;border-radius:10px}
+.chart-number{text-align:right;font-weight:bold}
+.meal-list{display:grid;gap:10px}
+.meal-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px;border:1px solid var(--border);border-radius:12px
+}
+.meal-icon{width:40px;height:40px;display:grid;place-items:center;
+  border-radius:11px;background:#eaf3ff;font-size:21px;flex-shrink:0}
+.meal-info{flex:1;min-width:0}
+.meal-info strong{font-size:13px;overflow-wrap:anywhere}
+.meal-info p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.meal-kcal{font-weight:bold;color:var(--navy);font-size:13px}
+.empty{text-align:center;padding:35px 10px;color:var(--muted);font-size:13px}
+.notice{padding:12px;border-radius:10px;background:#fff8e7;
+  color:#805a12;font-size:12px;line-height:1.6;margin-top:15px}
+.section{display:none}
+.section.active{display:block}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+.hidden{display:none!important}
+@media(max-width:1050px){
+  .sidebar{width:205px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .layout{display:block}
+  .sidebar{width:100%;padding:15px}
+  .brand{font-size:17px}
+  .nav{display:flex;overflow-x:auto;margin-top:15px}
+  .nav button{white-space:nowrap;padding:10px;font-size:12px}
+  .sidebar-note{display:none}
+  main{padding:15px}
+  h1{font-size:22px}
+  .two{grid-template-columns:1fr}
+  .panel{padding:15px}
+}
+@media(max-width:400px){
+  .cards{grid-template-columns:1fr 1fr;gap:9px}
+  .stat{padding:12px}
+  .stat-value{font-size:20px}
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">🍽️ PINGGAN<br><span>SIHAT DIGITAL</span>
+      <small>Projek STEM · Misi Sihat Boboy</small>
+    </div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard">🏠 Dashboard</button>
+      <button data-page="rekod">📝 Rekod Makanan</button>
+      <button data-page="analisis">📊 Analisis Nutrisi</button>
+      <button data-page="tetapan">⚙️ Tetapan</button>
+    </nav>
+    <div class="sidebar-note">
+      <strong>💡 Misi Boboy</strong><br>
+      Makan secara seimbang, rekod pengambilan makanan dan
+      bina tabiat pemakanan yang lebih sihat.
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard Pemakanan</h1>
+        <div class="muted">Pantau pemakanan anda setiap hari.</div>
+      </div>
+      <div class="pill">● SISTEM AKTIF</div>
+    </header>
+
+    <section class="section active" id="dashboard">
+      <div class="hero">
+        <h2>🌱 Selamat datang ke Misi Sihat Boboy!</h2>
+        <p>Catat makanan, pantau kalori dan kenali nutrisi
+          dalam setiap hidangan anda.</p>
+        <div class="field" style="max-width:220px">
+          <label style="color:white">Tarikh pemantauan</label>
+          <input type="date" id="filterDate">
+        </div>
+      </div>
+
+      <div class="grid cards">
+        <div class="stat">
+          <div class="stat-label">🔥 Jumlah kalori</div>
+          <div class="stat-value" id="totalKcal">0 kcal</div>
+          <div class="stat-foot" id="kcalFoot">Sasaran: 2,000 kcal</div>
+          <div class="progress"><div id="kcalProgress"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">💪 Protein</div>
+          <div class="stat-value" id="totalProtein">0 g</div>
+          <div class="stat-foot">Jumlah hari dipilih</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">🌾 Karbohidrat</div>
+          <div class="stat-value" id="totalCarbs">0 g</div>
+          <div class="stat-foot">Jumlah hari dipilih</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">💧 Air diminum</div>
+          <div class="stat-value" id="totalWater">0 ml</div>
+          <div class="stat-foot" id="waterFoot">Sasaran: 2,000 ml</div>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:20px">
+        <div class="panel">
+          <h2>📊 Ringkasan nutrisi</h2>
+          <div class="chart-row">
+            <span>Protein</span><div class="bar"><div id="barProtein" style="background:#2878d4"></div></div>
+            <span class="chart-number" id="numProtein">0 g</span>
+          </div>
+          <div class="chart-row">
+            <span>Karbohidrat</span><div class="bar"><div id="barCarbs" style="background:#f59e0b"></div></div>
+            <span class="chart-number" id="numCarbs">0 g</span>
+          </div>
+          <div class="chart-row">
+            <span>Lemak</span><div class="bar"><div id="barFat" style="background:#ef5b68"></div></div>
+            <span class="chart-number" id="numFat">0 g</span>
+          </div>
+          <div class="chart-row">
+            <span>Serat</span><div class="bar"><div id="barFiber" style="background:#22a66b"></div></div>
+            <span class="chart-number" id="numFiber">0 g</span>
+          </div>
+          <div class="notice">Nilai nutrisi bergantung pada ketepatan data
+            makanan yang dimasukkan.</div>
+        </div>
+
+        <div class="panel">
+          <h2>🍱 Hidangan hari ini</h2>
+          <div id="recentMeals" class="meal-list"></div>
+          <div class="actions">
+            <button class="btn green" onclick="showPage('rekod')">+ Tambah makanan</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rekod">
+      <div class="panel">
+        <h2>📝 Rekod pengambilan makanan</h2>
+        <p class="muted">Masukkan maklumat setiap hidangan untuk
+          mengira jumlah nutrisi harian.</p>
+        <form id="foodForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="foodDate">Tarikh</label>
+              <input type="date" id="foodDate" required>
+            </div>
+            <div class="field">
+              <label for="foodTime">Masa</label>
+              <input type="time" id="foodTime" required>
+            </div>
+            <div class="field">
+              <label for="mealType">Waktu makan</label>
+              <select id="mealType">
+                <option>Sarapan</option>
+                <option>Makan tengah hari</option>
+                <option>Minum petang</option>
+                <option>Makan malam</option>
+                <option>Snek</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="foodName">Nama makanan / minuman</label>
+              <input id="foodName" placeholder="Contoh: Nasi putih" required>
+            </div>
+            <div class="field">
+              <label for="foodQty">Berat / kuantiti (gram)</label>
+              <input type="number" id="foodQty" min="0.1" step="0.1"
+                placeholder="150" required>
+            </div>
+            <div class="field">
+              <label for="foodKcal">Kalori (kcal)</label>
+              <input type="number" id="foodKcal" min="0" step="0.1"
+                placeholder="200" required>
+            </div>
+            <div class="field">
+              <label for="foodProtein">Protein (g)</label>
+              <input type="number" id="foodProtein" min="0" step="0.1" value="0" required>
+            </div>
+            <div class="field">
+              <label for="foodCarbs">Karbohidrat (g)</label>
+              <input type="number" id="foodCarbs" min="0" step="0.1" value="0" required>
+            </div>
+            <div class="field">
+              <label for="foodFat">Lemak (g)</label>
+              <input type="number" id="foodFat" min="0" step="0.1" value="0" required>
+            </div>
+            <div class="field">
+              <label for="foodFiber">Serat (g)</label>
+              <input type="number" id="foodFiber" min="0" step="0.1" value="0" required>
+            </div>
+            <div class="field full">
+              <label for="foodWater">Air diminum bersama hidangan (ml)</label>
+              <input type="number" id="foodWater" min="0" step="1" value="0" required>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn green">💾 Simpan rekod</button>
+            <button type="reset" class="btn gray">Kosongkan borang</button>
+          </div>
+        </form>
+        <div id="formMessage" class="notice hidden"></div>
+      </div>
+
+      <div class="panel">
+        <div class="topbar">
+          <div>
+            <h2 style="margin-bottom:5px">Senarai rekod makanan</h2>
+            <div class="muted">Rekod mengikut tarikh yang dipilih.</div>
+          </div>
+          <button class="btn gray" onclick="exportCSV()">⬇ Eksport CSV</button>
+        </div>
+        <div class="field" style="max-width:230px;margin-bottom:18px">
+          <label for="recordDate">Tapis tarikh</label>
+          <input type="date" id="recordDate">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Masa</th><th>Waktu</th><th>Makanan</th>
+              <th>Kuantiti</th><th>Kalori</th><th>Protein</th>
+              <th>Karbohidrat</th><th>Tindakan</th>
+            </tr></thead>
+            <tbody id="recordTable"></tbody>
+          </table>
+        </div>
+        <div id="tableEmpty" class="empty">Tiada rekod makanan untuk tarikh ini.</div>
+      </div>
+    </section>
+
+    <section class="section" id="analisis">
+      <div class="panel">
+        <h2>📈 Analisis pengambilan harian</h2>
+        <div class="field" style="max-width:240px;margin-bottom:20px">
+          <label for="analysisDate">Pilih tarikh analisis</label>
+          <input type="date" id="analysisDate">
+        </div>
+        <div class="grid cards">
+          <div class="stat"><div class="stat-label">Jumlah hidangan</div>
+            <div class="stat-value" id="aMeals">0</div></div>
+          <div class="stat"><div class="stat-label">Jumlah kalori</div>
+            <div class="stat-value" id="aKcal">0</div></div>
+          <div class="stat"><div class="stat-label">Jumlah lemak</div>
+            <div class="stat-value" id="aFat">0 g</div></div>
+          <div class="stat"><div class="stat-label">Jumlah serat</div>
+            <div class="stat-value" id="aFiber">0 g</div></div>
+        </div>
+        <div class="notice" id="analysisNote">
+          Tambah rekod makanan untuk memulakan analisis.
+        </div>
+      </div>
+      <div class="panel">
+        <h2>📅 Sejarah rekod harian</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tarikh</th><th>Bilangan rekod</th><th>Kalori</th><th>Protein</th><th>Air (ml)</th></tr></thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tetapan">
+      <div class="panel">
+        <h2>⚙️ Tetapan pemantauan</h2>
+        <div class="form-grid">
+          <div class="field">
+            <label for="goalKcal">Sasaran kalori harian (kcal)</label>
+            <input type="number" id="goalKcal" min="500" max="10000">
+          </div>
+          <div class="field">
+            <label for="goalWater">Sasaran air harian (ml)</label>
+            <input type="number" id="goalWater" min="250" max="10000">
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn green" onclick="saveSettings()">Simpan tetapan</button>
+          <button class="btn gray" onclick="downloadBackup()">Sandaran JSON</button>
+          <button class="btn red" onclick="clearAll()">Padam semua data</button>
+        </div>
+        <div class="notice">
+          Sasaran kalori dan air perlu disesuaikan mengikut umur,
+          aktiviti dan keperluan individu. Nilai lalai bukan nasihat
+          pemakanan khusus.
+        </div>
+      </div>
+      <div class="panel">
+        <h2>🔌 Sambungan Pinggan Sihat Digital</h2>
+        <p class="muted">Versi ini menggunakan data yang dimasukkan secara
+          manual. Sensor berat dan dashboard dalam talian belum disambungkan.</p>
+        <p style="font-size:13px;line-height:1.8">
+          <strong>Fasa seterusnya:</strong><br>
+          1. Sambungkan ESP32 kepada sensor load cell dan HX711.<br>
+          2. Hantar bacaan berat melalui Wi-Fi ke pelayan.<br>
+          3. Padankan makanan dengan pangkalan data nutrisi.<br>
+          4. Simpan rekod dalam Google Sheets atau pangkalan data.<br>
+          5. Paparkan rekod daripada semua peranti yang dibenarkan.
+        </p>
+      </div>
+    </section>
+
+    <div class="footer">PINGGAN SIHAT DIGITAL · Projek STEM Misi Sihat Boboy<br>
+      Data disimpan pada pelayar peranti ini.</div>
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const today = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+const currentTime = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+};
+
+let records = [];
+let settings = {kcal:2000, water:2000};
+let nextId = 1;
+
+try {
+  records = JSON.parse(localStorage.getItem("psd_records") || "[]");
+  settings = {...settings, ...JSON.parse(localStorage.getItem("psd_settings") || "{}")};
+  nextId = Math.max(0,...records.map(r=>Number(r.id)||0))+1;
+} catch(e) {
+  records = [];
+}
+
+function persist() {
+  try {
+    localStorage.setItem("psd_records", JSON.stringify(records));
+    localStorage.setItem("psd_settings", JSON.stringify(settings));
+  } catch(e) {
+    alert("Data tidak dapat disimpan. Storan pelayar mungkin penuh atau dinyahaktifkan.");
+  }
+}
+
+function num(v) { return Number(v)||0; }
+function sum(arr,key) { return arr.reduce((s,r)=>s+num(r[key]),0); }
+function fmt(n) { return Number(n.toFixed(1)).toLocaleString("ms-MY"); }
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function selectedRecords(date) {
+  return records.filter(r=>r.date===date).sort((a,b)=>a.time.localeCompare(b.time));
+}
+function totals(arr) {
+  return {
+    kcal:sum(arr,"kcal"), protein:sum(arr,"protein"),
+    carbs:sum(arr,"carbs"), fat:sum(arr,"fat"),
+    fiber:sum(arr,"fiber"), water:sum(arr,"water")
+  };
+}
+
+function showPage(id) {
+  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  const titles={dashboard:"Dashboard Pemakanan",rekod:"Rekod Makanan",analisis:"Analisis Nutrisi",tetapan:"Tetapan Sistem"};
+  $("pageTitle").textContent=titles[id]||"Dashboard";
+  if(id==="rekod") renderTable();
+  if(id==="analisis") renderAnalysis();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+$("filterDate").value=today();
+$("foodDate").value=today();
+$("recordDate").value=today();
+$("analysisDate").value=today();
+$("foodTime").value=currentTime();
+$("goalKcal").value=settings.kcal;
+$("goalWater").value=settings.water;
+
+$("filterDate").addEventListener("change",renderDashboard);
+$("recordDate").addEventListener("change",renderTable);
+$("analysisDate").addEventListener("change",renderAnalysis);
+
+$("foodForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const record={
+    id:nextId++,
+    date:$("foodDate").value,
+    time:$("foodTime").value,
+    meal:$("mealType").value,
+    food:$("foodName").value.trim(),
+    qty:num($("foodQty").value),
+    kcal:num($("foodKcal").value),
+    protein:num($("foodProtein").value),
+    carbs:num($("foodCarbs").value),
+    fat:num($("foodFat").value),
+    fiber:num($("foodFiber").value),
+    water:num($("foodWater").value)
+  };
+  if(!record.date || !record.time || !record.food || record.qty<=0) {
+    alert("Sila isi tarikh, masa, nama makanan dan kuantiti yang sah.");
+    return;
+  }
+  if(Object.values(record).some(v=>typeof v==="number" && (!Number.isFinite(v)||v<0))) {
+    alert("Nilai numerik tidak sah.");
+    return;
+  }
+  records.push(record);
+  persist();
+  $("filterDate").value=record.date;
+  $("recordDate").value=record.date;
+  $("analysisDate").value=record.date;
+  $("foodForm").reset();
+  $("foodDate").value=record.date;
+  $("foodTime").value=currentTime();
+  ["foodProtein","foodCarbs","foodFat","foodFiber","foodWater"].forEach(id=>$(id).value=0);
+  $("formMessage").textContent="Rekod berjaya disimpan pada peranti ini.";
+  $("formMessage").classList.remove("hidden");
+  renderAll();
+  showPage("rekod");
+});
+
+function renderDashboard(){
+  const date=$("filterDate").value||today();
+  const arr=selectedRecords(date);
+  const t=totals(arr);
+  $("totalKcal").textContent=fmt(t.kcal)+" kcal";
+  $("kcalFoot").textContent="Sasaran: "+fmt(settings.kcal)+" kcal";
+  $("kcalProgress").style.width=Math.min(100,t.kcal/settings.kcal*100)+"%";
+  $("totalProtein").textContent=fmt(t.protein)+" g";
+  $("totalCarbs").textContent=fmt(t.carbs)+" g";
+  $("totalWater").textContent=fmt(t.water)+" ml";
+  $("waterFoot").textContent="Sasaran: "+fmt(settings.water)+" ml";
+
+  const macros=[
+    ["Protein",t.protein,"barProtein","numProtein"],
+    ["Karbohidrat",t.carbs,"barCarbs","numCarbs"],
+    ["Lemak",t.fat,"barFat","numFat"],
+    ["Serat",t.fiber,"barFiber","numFiber"]
+  ];
+  const max=Math.max(1,...macros.map(m=>m[1]));
+  macros.forEach(m=>{
+    $(m[2]).style.width=(m[1]/max*100)+"%";
+    $(m[3]).textContent=fmt(m[1])+" g";
+  });
+
+  const recent=arr.slice().reverse().slice(0,5);
+  $("recentMeals").innerHTML=recent.length?recent.map(r=>`
+    <div class="meal-item">
+      <div class="meal-icon">${mealIcon(r.meal)}</div>
+      <div class="meal-info">
+        <strong>${escapeHTML(r.food)}</strong>
+        <p>${escapeHTML(r.meal)} · ${escapeHTML(r.time)} · ${fmt(r.qty)} g</p>
+      </div>
+      <div class="meal-kcal">${fmt(r.kcal)} kcal</div>
+    </div>`).join(""):'<div class="empty">Belum ada makanan direkodkan.</div>';
+}
+
+function mealIcon(meal){
+  return meal==="Sarapan"?"🍳":
+    meal==="Makan tengah hari"?"🍛":
+    meal==="Makan malam"?"🍽️":
+    meal==="Minum petang"?"🥪":"🍎";
+}
+
+function renderTable(){
+  const arr=selectedRecords($("recordDate").value||today());
+  $("tableEmpty").classList.toggle("hidden",arr.length>0);
+  $("recordTable").innerHTML=arr.map(r=>`
+    <tr>
+      <td>${escapeHTML(r.time)}</td>
+      <td>${escapeHTML(r.meal)}</td>
+      <td><strong>${escapeHTML(r.food)}</strong></td>
+      <td>${fmt(r.qty)} g</td>
+      <td>${fmt(r.kcal)}</td>
+      <td>${fmt(r.protein)} g</td>
+      <td>${fmt(r.carbs)} g</td>
+      <td><button class="btn red small" onclick="deleteRecord(${r.id})">Padam</button></td>
+    </tr>`).join("");
+}
+
+function deleteRecord(id){
+  if(!confirm("Padam rekod makanan ini?"))return;
+  records=records.filter(r=>r.id!==id);
+  persist();
+  renderAll();
+}
+
+function renderAnalysis(){
+  const date=$("analysisDate").value||today();
+  const arr=selectedRecords(date);
+  const t=totals(arr);
+  $("aMeals").textContent=arr.length;
+  $("aKcal").textContent=fmt(t.kcal)+" kcal";
+  $("aFat").textContent=fmt(t.fat)+" g";
+  $("aFiber").textContent=fmt(t.fiber)+" g";
+  $("analysisNote").textContent=arr.length
+    ?`Pada ${date}, sebanyak ${arr.length} rekod makanan dicatatkan dengan jumlah ${fmt(t.kcal)} kcal. ${t.kcal>settings.kcal?"Jumlah melebihi sasaran yang ditetapkan.":"Semak keseluruhan pemakanan dan keperluan individu; sasaran kalori bukan ukuran tunggal kesihatan."}`
+    :"Tiada rekod untuk tarikh ini. Tambah makanan untuk melihat analisis.";
+
+  const days=[...new Set(records.map(r=>r.date))].sort((a,b)=>b.localeCompare(a));
+  $("historyTable").innerHTML=days.length?days.map(d=>{
+    const day=selectedRecords(d), s=totals(day);
+    return `<tr><td>${escapeHTML(d)}</td><td>${day.length}</td>
+      <td>${fmt(s.kcal)} kcal</td><td>${fmt(s.protein)} g</td>
+      <td>${fmt(s.water)} ml</td></tr>`;
+  }).join(""):'<tr><td colspan="5">Belum ada rekod.</td></tr>';
+}
+
+function saveSettings(){
+  const kcal=num($("goalKcal").value), water=num($("goalWater").value);
+  if(kcal<500||kcal>10000||water<250||water>10000){
+    alert("Sasaran kalori mestilah 500–10,000 kcal dan air 250–10,000 ml.");
+    return;
+  }
+  settings={kcal,water};
+  persist();
+  renderAll();
+  alert("Tetapan berjaya disimpan.");
+}
+
+function csvCell(v){
+  return '"'+String(v??"").replace(/"/g,'""')+'"';
+}
+function exportCSV(){
+  if(!records.length){alert("Tiada rekod untuk dieksport.");return;}
+  const headers=["Tarikh","Masa","Waktu makan","Makanan","Kuantiti (g)","Kalori (kcal)","Protein (g)","Karbohidrat (g)","Lemak (g)","Serat (g)","Air (ml)"];
+  const rows=records.slice().sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time))
+    .map(r=>[r.date,r.time,r.meal,r.food,r.qty,r.kcal,r.protein,r.carbs,r.fat,r.fiber,r.water]);
+  const csv="\uFEFF"+[headers,...rows].map(row=>row.map(csvCell).join(",")).join("\r\n");
+  downloadFile(csv,"rekod-pinggan-sihat.csv","text/csv;charset=utf-8");
+}
+function downloadBackup(){
+  const data=JSON.stringify({settings,records,exportedAt:new Date().toISOString()},null,2);
+  downloadFile(data,"sandaran-pinggan-sihat.json","application/json");
+}
+function downloadFile(content,name,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;a.click();
+  URL.revokeObjectURL(url);
+}
+function clearAll(){
+  if(!confirm("Amaran: semua rekod makanan dan tetapan akan dipadam daripada pelayar ini. Teruskan?"))return;
+  records=[];nextId=1;
+  persist();
+  renderAll();
+}
+function renderAll(){
+  renderDashboard();renderTable();renderAnalysis();
+}
+renderAll();
+</script>
+</body>
+</html>
